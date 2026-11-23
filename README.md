@@ -27,18 +27,62 @@ The system is designed to include:
 
 ```text
 IR-Project/
+│
 ├── dataset/
+│   └── .gitkeep
+│
 ├── src/
 │   └── ir_system/
+│       ├── __init__.py
+│       │
 │       ├── indexing/
+│       │   ├── __init__.py
+│       │   ├── document_loader.py
+│       │   └── positional_index.py
+│       │
 │       ├── weighting/
+│       │   ├── __init__.py
+│       │   ├── term_frequency.py
+│       │   ├── document_statistics.py
+│       │   ├── tfidf.py
+│       │   └── normalization.py
+│       │
 │       ├── retrieval/
+│       │   ├── __init__.py
+│       │   ├── query_processor.py
+│       │   ├── similarity.py
+│       │   └── ranking.py
+│       │
 │       └── application_controller.py
+│
 ├── gui/
 │   ├── app.py
 │   └── components/
+│       ├── __init__.py
+│       ├── search.py
+│       ├── results.py
+│       └── statistics.py
+│
 ├── output/
+│   ├── positional_index/
+│   │   └── .gitkeep
+│   ├── tf_matrix/
+│   │   └── .gitkeep
+│   ├── df_idf/
+│   │   └── .gitkeep
+│   ├── tfidf_matrix/
+│   │   └── .gitkeep
+│   ├── normalized_matrix/
+│   │   └── .gitkeep
+│   └── query_results/
+│       └── .gitkeep
+│
 ├── tests/
+│   ├── __init__.py
+│   ├── test_indexing.py
+│   ├── test_weighting.py
+│   └── test_retrieval.py
+│
 ├── main.py
 ├── requirements.txt
 ├── .gitignore
