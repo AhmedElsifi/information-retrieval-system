@@ -8,6 +8,12 @@ from src.ir_system.weighting.document_statistics import (
     generate_df_idf_table,
     save_df_idf_table,
 )
+from src.ir_system.weighting.tfidf import (
+    calculate_tfidf,
+    calculate_vector_lengths,
+    save_tfidf_matrix,
+    save_vector_lengths
+)
 
 
 def test_calculate_df():
@@ -121,3 +127,58 @@ def test_count_documents_empty(tmp_path):
     result = count_documents(tmp_path)
 
     assert result == 0
+
+
+def test_calculate_tfidf():
+    weighted_tf = pd.DataFrame({
+        "d1": [1.30103, 0],
+        "d2": [1.0, 0.5]
+    }, index=["care", "patient"])
+
+    idf_table = pd.DataFrame({
+        "term": ["care", "patient"],
+        "df": [2, 1],
+        "idf": [0.397940, 1.0]
+    })
+
+    result = calculate_tfidf(weighted_tf, idf_table)
+
+    assert result.loc["care", "d1"] == pytest.approx(
+        1.30103 * 0.397940
+    )
+
+    assert result.loc["patient", "d2"] == pytest.approx(0.5)
+
+
+def test_calculate_vector_lengths():
+    tfidf_matrix = pd.DataFrame({
+        "d1": [3.0, 4.0],
+        "d2": [0.0, 5.0]
+    }, index=["care", "patient"])
+
+    result = calculate_vector_lengths(tfidf_matrix)
+
+    assert result["d1"] == pytest.approx(5.0)
+    assert result["d2"] == pytest.approx(5.0)
+
+
+def test_save_tfidf_matrix(tmp_path):
+    tfidf_matrix = pd.DataFrame({
+        "d1": [0.5],
+        "d2": [0.3]
+    }, index=["care"])
+
+    save_tfidf_matrix(tfidf_matrix, tmp_path)
+
+    assert (tmp_path / "tfidf_matrix.csv").exists()
+
+
+def test_save_vector_lengths(tmp_path):
+    vector_lengths = pd.Series({
+        "d1": 5.0,
+        "d2": 3.0
+    })
+
+    save_vector_lengths(vector_lengths, tmp_path)
+
+    assert (tmp_path / "vector_lengths.csv").exists()
